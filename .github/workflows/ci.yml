@@ -3,7 +3,7 @@ name: CI for Ibis
 on: [push, pull_request]
 
 jobs:
-  php-cs-fixer:
+  style-and-tests:
     runs-on: ubuntu-20.04
 
     steps:
@@ -32,3 +32,6 @@ jobs:
 
       - name: Execute PHP CS Fixer review
         run: composer run csfix-review
+
+      - name: Execute PHPUnit
+        run: composer run test

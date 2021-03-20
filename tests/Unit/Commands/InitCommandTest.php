@@ -3,8 +3,8 @@
 namespace Tests\Unit\Commands;
 
 use Ibis\Commands\InitCommand;
-use Illuminate\Filesystem\Filesystem;
 use PHPUnit\Framework\TestCase;
+use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
