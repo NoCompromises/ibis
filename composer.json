@@ -28,6 +28,7 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.18",
+        "phpunit/phpunit": "^9",
         "roave/security-advisories": "dev-latest",
         "symfony/var-dumper": "^5.0"
     },
@@ -36,21 +37,30 @@
             "Ibis\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
     "config": {
         "sort-packages": true,
         "optimize-autoloader": true
     },
     "scripts": {
         "csfix": [
-            "php-cs-fixer fix src stubs --config=.php_cs"
+            "php-cs-fixer fix src stubs tests --config=.php_cs"
         ],
         "csfix-review": [
-            "php-cs-fixer fix src stubs --config=.php_cs --dry-run -v"
+            "php-cs-fixer fix src stubs tests --config=.php_cs --dry-run -v"
+        ],
+        "test": [
+            "phpunit --testdox"
         ]
     },
     "scripts-descriptions": {
         "csfix": "Runs PHP CS Fixer to fix project files.",
-        "csfix-review": "Runs PHP CS Fixer to show the details of which files are out of code standard."
+        "csfix-review": "Runs PHP CS Fixer to show the details of which files are out of code standard.",
+        "test": "Run PHPUnit with TestDox output."
     },
     "minimum-stability": "dev",
     "prefer-stable": true

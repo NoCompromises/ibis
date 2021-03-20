@@ -111,6 +111,10 @@ To fix the source code, run the following composer script:
 
 `composer run csfix`
 
+Unit tests are written in PHPUnit. These can be ran with a composer script like this:
+
+`composer run test`
+
 ## Credits
 
 - [Mohamed Said](https://github.com/themsaid)
