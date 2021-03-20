@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Commands;
 
+use PHPUnit\Framework\TestCase;
 use Ibis\Commands\SortContentCommand;
 use Illuminate\Filesystem\Filesystem;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -32,11 +32,11 @@ class SortContentCommandTest extends TestCase
     {
         $directory = __DIR__.'/../../Mocks/ContentToSort/content';
         $filesystem = new Filesystem();
-        $filesystem->delete([
+        $filesystem->delete([[
             $directory.'/001-big-headline.md',
             $directory.'/002-another-headline.md',
             $directory.'/003-i-am-a-headline.md'
-        ]);
+        ]]);
     }
 
     public function testNoFilesNothingIsDone(): void
