@@ -12,11 +12,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SampleCommand extends Command
 {
     /**
-     * @var OutputInterface
-     */
-    private $output;
-
-    /**
      * @var Filesystem
      */
     private $disk;

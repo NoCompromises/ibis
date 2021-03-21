@@ -11,11 +11,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SortContentCommand extends Command
 {
     /**
-     * @var OutputInterface
-     */
-    private $output;
-
-    /**
      * @var Filesystem
      */
     private $disk;
