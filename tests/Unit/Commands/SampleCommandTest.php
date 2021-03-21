@@ -32,6 +32,7 @@ class SampleCommandTest extends TestCase
         $directory = __DIR__.'/../../Mocks/Sample/export';
         $filesystem = new Filesystem();
         $filesystem->delete("{$directory}/sample-.i-am-a-title-here-light.pdf");
+        $filesystem->delete("{$directory}/sample-.i-am-a-title-here-themery.pdf");
     }
 
     public function testSampleCreatedSuccessfullyWithDefaultArgument(): void
