@@ -338,11 +338,19 @@ class BuildCommandTest extends TestCase
         self::assertStringEqualsFile($directory.'/h1-break-source.html', $result);
     }
 
+    public function testDeepInspectionPrepareForPdfThrowsExceptionIfInvalidDecorator(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('stdClass is not an instance of Ibis\Decorators\DecoratorContract');
+
+        $directory = __DIR__.'/../../Mocks/InvalidDecorator';
+        chdir($directory);
+
+        $this->getPrepareForPdf('', 2);
+    }
+
     /**
-     * Normally you don't want to do something like this. However, since these are hard-coded
-     * in the command and not something like decorators, this is just a faster/easier
-     * way to test this functionality.  In the future hopefully these are refactored out into
-     * decorators and then this type of testing is not a better solution.
+     * Normally you don't want to do something like this. But, to save time on our setups, we're going to continue to run this command like this.
      *
      * @param $html
      * @param $file
