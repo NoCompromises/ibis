@@ -39,6 +39,16 @@ return [
     ],
 
     /**
+     * Location of markdown files for book content
+     */
+    'content_path' => __DIR__.'/content',
+
+    /**
+     * Looking of export folder for built book / sample
+     */
+    'export_path' => __DIR__.'/export',
+
+    /**
      * Page ranges to be used with the sample command.
      */
     'sample' => [

@@ -12,7 +12,7 @@ class Ibis
     public static $config;
 
     /**
-     *
+     * Provides the ebook title
      */
     public static function title()
     {
@@ -20,19 +20,35 @@ class Ibis
     }
 
     /**
-     *
-     */
-    public static function outputFileName()
-    {
-        return Str::slug(self::config()['title']);
-    }
-
-    /**
-     *
+     * Provides the ebook author
      */
     public static function author()
     {
         return self::config()['author'];
+    }
+
+    /**
+     * Provides the path for ebook content
+     */
+    public static function contentPath()
+    {
+        return self::config()['content_path'];
+    }
+
+    /**
+     * Provides the path for ebook export
+     */
+    public static function exportPath()
+    {
+        return self::config()['export_path'];
+    }
+
+    /**
+     * Profiles the ebook output file name without extension
+     */
+    public static function outputFileName()
+    {
+        return Str::slug(self::config()['title']);
     }
 
     /**
