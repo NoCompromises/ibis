@@ -63,19 +63,15 @@ class BuildCommand extends Command
         $this->output = $output;
         $this->themeName = $input->getArgument('theme');
 
-        $currentPath = getcwd();
-        $config = require $currentPath.'/ibis.php';
-
         $this->ensureExportDirectoryExists(
-            $currentPath = getcwd()
+            Ibis::exportPath()
         );
 
-        $theme = $this->getTheme($currentPath, $this->themeName);
+        $theme = $this->getTheme($this->themeName);
 
         $this->buildPdf(
-            $this->buildHtml($currentPath.'/content'),
-            $config,
-            $currentPath,
+            $this->buildHtml(Ibis::contentPath()),
+            Ibis::config(),
             $theme
         );
 
@@ -86,15 +82,15 @@ class BuildCommand extends Command
     }
 
     /**
-     * @param  string  $currentPath
+     * @param  string  $exportPath
      */
-    protected function ensureExportDirectoryExists(string $currentPath): void
+    protected function ensureExportDirectoryExists(string $exportPath): void
     {
         $this->output->writeln('<fg=yellow>==></> Preparing Export Directory ...');
 
-        if (! $this->disk->isDirectory($currentPath.'/export')) {
+        if (! $this->disk->isDirectory($exportPath)) {
             $this->disk->makeDirectory(
-                $currentPath.'/export',
+                $exportPath,
                 0755,
                 true
             );
@@ -164,18 +160,19 @@ class BuildCommand extends Command
     /**
      * @param  string  $html
      * @param  array  $config
-     * @param  string  $currentPath
      * @param  string  $theme
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \Mpdf\MpdfException
      */
-    protected function buildPdf(string $html, array $config, string $currentPath, string $theme)
+    protected function buildPdf(string $html, array $config, string $theme)
     {
         $defaultConfig = (new ConfigVariables())->getDefaults();
         $fontDirs = $defaultConfig['fontDir'];
 
         $defaultFontConfig = (new FontVariables())->getDefaults();
         $fontData = $defaultFontConfig['fontdata'];
+
+        $assetsPath = Ibis::assetsPath();
 
         $pdf = new Mpdf([
             'mode' => 'utf-8',
@@ -184,7 +181,7 @@ class BuildCommand extends Command
             'margin_right' => $config['document']['margin_right'] ?? 27,
             'margin_bottom' => $config['document']['margin_bottom'] ?? 14,
             'margin_top' => $config['document']['margin_top'] ?? 14,
-            'fontDir' => array_merge($fontDirs, [getcwd().'/assets/fonts']),
+            'fontDir' => array_merge($fontDirs, [$assetsPath.'/fonts']),
             'fontdata' => $this->fonts($config, $fontData),
         ]);
 
@@ -205,7 +202,7 @@ class BuildCommand extends Command
 
         $pdf->SetMargins(400, 100, 12);
 
-        if ($this->disk->isFile($currentPath.'/assets/cover.jpg')) {
+        if ($this->disk->isFile($assetsPath.'/cover.jpg')) {
             $this->output->writeln('<fg=yellow>==></> Adding Book Cover ...');
 
             $coverPosition = $config['cover']['position'] ?? 'position: absolute; left:0; right: 0; top: -.2; bottom: 0;';
@@ -214,16 +211,16 @@ class BuildCommand extends Command
             $pdf->WriteHTML(
                 <<<HTML
 <div style="{$coverPosition}">
-    <img src="assets/cover.jpg" style="{$coverDimensions}"/>
+    <img src="{$assetsPath}/cover.jpg" style="{$coverDimensions}"/>
 </div>
 HTML
             );
 
             $pdf->AddPage();
-        } elseif ($this->disk->isFile($currentPath.'/assets/cover.html')) {
+        } elseif ($this->disk->isFile($assetsPath.'/cover.html')) {
             $this->output->writeln('<fg=yellow>==></> Adding Book Cover ...');
 
-            $cover = $this->disk->get($currentPath.'/assets/cover.html');
+            $cover = $this->disk->get($assetsPath.'/cover.html');
 
             $pdf->WriteHTML($cover);
 
@@ -246,19 +243,19 @@ HTML
         $this->output->writeln('✨✨ '.$pdf->page.' PDF pages ✨✨');
 
         $pdf->Output(
-            $currentPath.'/export/'.Ibis::outputFileName().'-'.$this->themeName.'.pdf'
+            Ibis::exportPath().'/'.Ibis::outputFileName().'-'.$this->themeName.'.pdf'
         );
     }
 
     /**
-     * @param $currentPath
+     * Get the theme content
      * @param $themeName
      * @return string
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    private function getTheme($currentPath, $themeName)
+    private function getTheme($themeName)
     {
-        return $this->disk->get($currentPath."/assets/theme-$themeName.html");
+        return $this->disk->get(Ibis::assetsPath()."/theme-$themeName.html");
     }
 
     /**

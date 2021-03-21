@@ -47,17 +47,16 @@ class BuildCommandTest extends TestCase
         $filesystem = new Filesystem();
 
         $fullBuildDirectory = __DIR__.'/../../Mocks/FullBuild';
-        $filesystem->delete("{$fullBuildDirectory}/export/my-title-here-light.pdf");
-        $filesystem->delete("{$fullBuildDirectory}/export/my-title-here-another.pdf");
+        $filesystem->deleteDirectory("{$fullBuildDirectory}/export-book");
 
         $buildAddsDirectory = __DIR__.'/../../Mocks/BuildAddsExportDirectory';
-        $filesystem->deleteDirectory("{$buildAddsDirectory}/export");
+        $filesystem->deleteDirectory("{$buildAddsDirectory}/export-dir");
 
         $coverJPgDirectory = __DIR__.'/../../Mocks/BuildCoverJpg';
-        $filesystem->deleteDirectory("{$coverJPgDirectory}/export");
+        $filesystem->deleteDirectory("{$coverJPgDirectory}/export-book-here");
 
         $coverHtmlDirectory = __DIR__.'/../../Mocks/BuildCoverHtml';
-        $filesystem->deleteDirectory("{$coverHtmlDirectory}/export");
+        $filesystem->deleteDirectory("{$coverHtmlDirectory}/export-it");
     }
 
     public function testBuildsSuccessfullyWithDefaultArgument(): void
@@ -82,7 +81,7 @@ class BuildCommandTest extends TestCase
             '',
         ], $commandOutputArray);
 
-        $exportedFilePath = $directory.'/export/my-title-here-light.pdf';
+        $exportedFilePath = $directory.'/export-book/my-title-here-light.pdf';
         self::assertFileExists($exportedFilePath);
 
         $this->examinePDFContentFullBuild($exportedFilePath);
@@ -112,7 +111,7 @@ class BuildCommandTest extends TestCase
             '',
         ], $commandOutputArray);
 
-        $exportedFilePath = $directory.'/export/my-title-here-another.pdf';
+        $exportedFilePath = $directory.'/export-book/my-title-here-another.pdf';
         self::assertFileExists($exportedFilePath);
 
         $this->examinePDFContentFullBuild($exportedFilePath);
@@ -184,7 +183,7 @@ class BuildCommandTest extends TestCase
         try {
             $this->commandTester->execute([]);
         } catch (FileNotFoundException $e) {
-            self::assertDirectoryExists($directory.'/export');
+            self::assertDirectoryExists($directory.'/export-dir');
         } catch (\Exception $e) {
             self::fail(get_class($e).' thrown');
         }
@@ -213,7 +212,7 @@ class BuildCommandTest extends TestCase
             '',
         ], $commandOutputArray);
 
-        $exportedFilePath = $directory.'/export/the-book-title-light.pdf';
+        $exportedFilePath = $directory.'/export-book-here/the-book-title-light.pdf';
         self::assertFileExists($exportedFilePath);
 
         $parser = new Parser();
@@ -267,7 +266,7 @@ class BuildCommandTest extends TestCase
             '',
         ], $commandOutputArray);
 
-        $exportedFilePath = $directory.'/export/title-of-the-book-light.pdf';
+        $exportedFilePath = $directory.'/export-it/title-of-the-book-light.pdf';
         self::assertFileExists($exportedFilePath);
 
         $parser = new Parser();
