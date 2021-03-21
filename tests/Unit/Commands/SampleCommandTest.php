@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Commands;
 
+use Ibis\Ibis;
 use Smalot\PdfParser\Parser;
 use PHPUnit\Framework\TestCase;
 use Ibis\Commands\SampleCommand;
@@ -18,6 +19,7 @@ class SampleCommandTest extends TestCase
 
     protected function setUp(): void
     {
+        Ibis::$config = null; // clear config cache
         $application = new Application();
         $application->add(new SampleCommand());
         $command = $application->find('sample');
@@ -29,7 +31,7 @@ class SampleCommandTest extends TestCase
      */
     protected function tearDown(): void
     {
-        $directory = __DIR__.'/../../Mocks/Sample/export';
+        $directory = __DIR__.'/../../Mocks/Sample/export-location';
         $filesystem = new Filesystem();
         $filesystem->delete("{$directory}/sample-.i-am-a-title-here-light.pdf");
         $filesystem->delete("{$directory}/sample-.i-am-a-title-here-themery.pdf");
@@ -43,7 +45,7 @@ class SampleCommandTest extends TestCase
         $this->commandTester->execute([]);
 
         self::assertEquals(0, $this->commandTester->getStatusCode());
-        $generatedFilePath = $directory.'/export/sample-.i-am-a-title-here-light.pdf';
+        $generatedFilePath = $directory.'/export-location/sample-.i-am-a-title-here-light.pdf';
         self::assertFileExists($generatedFilePath);
 
         $this->examinePDFContent($generatedFilePath);
@@ -57,7 +59,7 @@ class SampleCommandTest extends TestCase
         $this->commandTester->execute(['theme' => 'themery']);
 
         self::assertEquals(0, $this->commandTester->getStatusCode());
-        $generatedFilePath = $directory.'/export/sample-.i-am-a-title-here-themery.pdf';
+        $generatedFilePath = $directory.'/export-location/sample-.i-am-a-title-here-themery.pdf';
         self::assertFileExists($generatedFilePath);
 
         $this->examinePDFContent($generatedFilePath);

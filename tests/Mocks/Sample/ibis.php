@@ -9,4 +9,6 @@ return [
     ],
 
     'sample_notice' => 'My Sample Notice here.',
+
+    'export_path' => __DIR__.'/export-location',
 ];

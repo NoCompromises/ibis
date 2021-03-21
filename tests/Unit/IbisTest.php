@@ -37,4 +37,14 @@ class IbisTest extends TestCase
     {
         self::assertEquals(realpath(__DIR__.'/../Mocks/Ibis'), Ibis::exportPath());
     }
+
+    public function testSample(): void
+    {
+        self::assertEquals([[1, 2], [3, 4]], Ibis::sample());
+    }
+
+    public function testSampleNotice(): void
+    {
+        self::assertEquals('This is a sample notice.', Ibis::sampleNotice());
+    }
 }

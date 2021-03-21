@@ -52,6 +52,22 @@ class Ibis
     }
 
     /**
+     * Provides the sample config declaration
+     */
+    public static function sample()
+    {
+        return self::config()['sample'];
+    }
+
+    /**
+     * Provides the sample notice config declaration
+     */
+    public static function sampleNotice()
+    {
+        return self::config()['sample_notice'];
+    }
+
+    /**
      * @return array
      */
     private static function config()

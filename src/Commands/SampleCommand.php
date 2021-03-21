@@ -3,6 +3,7 @@
 namespace Ibis\Commands;
 
 use Ibis\Ibis;
+use Mpdf\Mpdf;
 use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -42,17 +43,15 @@ class SampleCommand extends Command
     {
         $this->disk = new Filesystem();
 
-        $currentPath = getcwd();
+        $exportPath = Ibis::exportPath();
 
-        $config = require $currentPath.'/ibis.php';
-
-        $mpdf = new \Mpdf\Mpdf();
+        $mpdf = new Mpdf();
 
         $fileName = Ibis::outputFileName().'-'.$input->getArgument('theme');
 
-        $mpdf->setSourceFile($currentPath.'/export/'.$fileName.'.pdf');
+        $mpdf->setSourceFile($exportPath.'/'.$fileName.'.pdf');
 
-        foreach ($config['sample'] as $range) {
+        foreach (Ibis::sample() as $range) {
             foreach (range($range[0], $range[1]) as $page) {
                 $mpdf->useTemplate(
                     $mpdf->importPage($page)
@@ -61,10 +60,10 @@ class SampleCommand extends Command
             }
         }
 
-        $mpdf->WriteHTML('<p style="text-align: center; font-size: 16px; line-height: 40px;">'.$config['sample_notice'].'</p>');
+        $mpdf->WriteHTML('<p style="text-align: center; font-size: 16px; line-height: 40px;">'.Ibis::sampleNotice().'</p>');
 
         $mpdf->Output(
-            $currentPath.'/export/sample-.'.$fileName.'.pdf'
+            $exportPath.'/sample-.'.$fileName.'.pdf'
         );
 
         return 0;
