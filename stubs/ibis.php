@@ -66,4 +66,15 @@ return [
      */
     'sample_notice' => 'This is a sample from "Laravel Queues in Action" by Mohamed Said. <br> 
                         For more information, <a href="https://www.learn-laravel-queues.com/">Click here</a>.',
+
+    /**
+     * These decorators will run in this order over the HTML content that has been generated during markdown processing.
+     * The output of the decorators stack will then be sent over to PDF generation.
+     */
+    'html_decorators' => [
+        new \Ibis\Decorators\BlockQuoteClass('quote'),
+        new \Ibis\Decorators\BlockQuoteClassWithPrefix('notice'),
+        new \Ibis\Decorators\BlockQuoteClassWithPrefix('warning'),
+        new \Ibis\Decorators\PageBreak(),
+    ],
 ];

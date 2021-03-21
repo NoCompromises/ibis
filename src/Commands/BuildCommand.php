@@ -5,10 +5,13 @@ namespace Ibis\Commands;
 use Ibis\Ibis;
 use Mpdf\Mpdf;
 use SplFileInfo;
+use Illuminate\Support\Arr;
+use Ibis\Decorators\PageBreak;
 use Mpdf\Config\FontVariables;
 use Mpdf\Config\ConfigVariables;
 use League\CommonMark\Environment;
 use Illuminate\Filesystem\Filesystem;
+use Ibis\Decorators\DecoratorContract;
 use Symfony\Component\Console\Command\Command;
 use League\CommonMark\Block\Element\FencedCode;
 use Symfony\Component\Console\Input\InputArgument;
@@ -139,20 +142,27 @@ class BuildCommand extends Command
      */
     private function prepareForPdf(string $html, $file)
     {
-        $commands = [
-            '[break]' => '<div style="page-break-after: always;"></div>'
-        ];
+        $htmlDecorators = (array) Ibis::htmlDecorators();
 
-        if ($file > 1) {
-            $html = str_replace('<h1>', '[break]<h1>', $html);
+        $breakDecoratorRegistered = ! empty(Arr::where($htmlDecorators, function ($class) {
+            return $class instanceof PageBreak;
+        }));
+
+        /** @todo This section should probably be filtered out to be theme-based only in the future */
+        if ($breakDecoratorRegistered) {
+            if ($file > 1) {
+                $html = str_replace('<h1>', '[break]<h1>', $html);
+            }
+
+            $html = str_replace('<h2>', '[break]<h2>', $html);
         }
 
-        $html = str_replace('<h2>', '[break]<h2>', $html);
-        $html = str_replace("<blockquote>\n<p>{notice}", "<blockquote class='notice'><p><strong>Notice:</strong>", $html);
-        $html = str_replace("<blockquote>\n<p>{warning}", "<blockquote class='warning'><p><strong>Warning:</strong>", $html);
-        $html = str_replace("<blockquote>\n<p>{quote}", "<blockquote class='quote'><p>", $html);
-
-        $html = str_replace(array_keys($commands), array_values($commands), $html);
+        foreach ($htmlDecorators as $htmlDecorator) {
+            if (! $htmlDecorator instanceof DecoratorContract) {
+                throw new \RuntimeException(get_class($htmlDecorator).' is not an instance of '.DecoratorContract::class);
+            }
+            $html = $htmlDecorator->decorate($html);
+        }
 
         return $html;
     }

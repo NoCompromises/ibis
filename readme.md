@@ -63,6 +63,8 @@ Inside the content directory, you can write multiple `.md` files. Ibis uses the 
 <h3> tags define different titles inside a chapter.
 ``` 
 
+_Note: page breaks will not be applied if you remove the PageBreak decorator from your configuration._
+
 ### Using images
 
 Images can be stored in the content folder and then brought in like this:
@@ -114,6 +116,24 @@ ibis content:sort
 ```
 
 This command will take your content files and read them in sorted alphabetically from the filesystem.  It will then rename the files with a 3 digit number indicating the order and the filename a slug of the first heading.
+
+## HTML Decorators
+
+You can add functionality to your ebook generation by creating additional HTML Decorators.  By default, the following decorators are registered:
+
+| Decorator | What it does |
+| --------- | ------------ |
+| `BlockQuoteClass` | This adds the `quote` class onto any `<blockquote>` tag when you specify it in your markdown like this: `>{quote} This is a quote` |
+| `BlockQuoteClassWithPrefix` | This adds the parameter passed into its constructor as a class onto any `<blockquote>` tag when you specify it in your markdown like this: `>{class_name} This is blockquote`.  By default, `notice` and `warning` are registered. |
+| `PageBreak` | This adds a page break to your PDF when `[break]` is encountered.  Without this registered in the configuration, H1 and H2 line breaks will not break as described above. |
+
+### Creating a New Decorator
+
+New decorators must be created either in your project namespace or any location that the global namespace can retrieve them.  They must implement the `Ibis\Decorators\DecoratorContract` interface.
+
+They will receive the parsed and possibly decorated HTML content from your markdown source.  They should return the HTML with your decoration.
+
+You can register new decorators in your project's `ibis.php` configuration file. Remember, they are processed in order.
 
 ## Development
 

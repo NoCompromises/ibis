@@ -303,6 +303,8 @@ class BuildCommandTest extends TestCase
 
     public function testDeepInspectionPrepareForPdfReplacesStandardItems(): void
     {
+        chdir(__DIR__.'/../../../stubs'); // this way we can make sure we're reading in the stub config
+
         $directory = __DIR__.'/../../Data/PrepareForPdf';
         $source = file_get_contents($directory.'/standard-replace-source.html');
 
@@ -313,6 +315,8 @@ class BuildCommandTest extends TestCase
 
     public function testDeepInspectionPrepareForPdfBreaksH1IfFileGreaterThanOne(): void
     {
+        chdir(__DIR__.'/../../../stubs'); // this way we can make sure we're reading in the stub config
+
         $directory = __DIR__.'/../../Data/PrepareForPdf';
         $source = file_get_contents($directory.'/h1-break-source.html');
 

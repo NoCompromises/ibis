@@ -4,6 +4,9 @@ namespace Ibis;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Ibis\Decorators\PageBreak;
+use Ibis\Decorators\BlockQuoteClass;
+use Ibis\Decorators\BlockQuoteClassWithPrefix;
 
 class Ibis
 {
@@ -74,6 +77,21 @@ class Ibis
     public static function sampleNotice()
     {
         return self::config()['sample_notice'];
+    }
+
+    /**
+     * Gets HTML decorators that are used to modify the HTML during PDF generation
+     *
+     * Registers ones to ensure backwards compatibility
+     */
+    public static function htmlDecorators()
+    {
+        return Arr::get(self::config(), 'html_decorators', [
+            new BlockQuoteClass('quote'),
+            new BlockQuoteClassWithPrefix('notice'),
+            new BlockQuoteClassWithPrefix('warning'),
+            new PageBreak(),
+        ]);
     }
 
     /**
