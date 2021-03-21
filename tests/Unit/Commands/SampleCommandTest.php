@@ -19,7 +19,8 @@ class SampleCommandTest extends TestCase
 
     protected function setUp(): void
     {
-        Ibis::$config = null; // clear config cache
+        Ibis::reset();
+
         $application = new Application();
         $application->add(new SampleCommand());
         $command = $application->find('sample');

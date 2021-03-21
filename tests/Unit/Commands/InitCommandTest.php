@@ -25,7 +25,8 @@ class InitCommandTest extends TestCase
 
     protected function setUp(): void
     {
-        Ibis::$config = null; // clear config cache
+        Ibis::reset();
+
         $application = new Application();
         $application->add(new InitCommand());
         $command = $application->find('init');

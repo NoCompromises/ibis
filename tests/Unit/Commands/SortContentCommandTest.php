@@ -18,7 +18,7 @@ class SortContentCommandTest extends TestCase
 
     protected function setUp(): void
     {
-        Ibis::$config = null; // clear the cache
+        Ibis::reset();
 
         $application = new Application();
         $application->add(new SortContentCommand());

@@ -31,7 +31,7 @@ class BuildCommandTest extends TestCase
      */
     protected function setUp(): void
     {
-        Ibis::$config = null; // more simple way of clearing out the static cache
+        Ibis::reset();
 
         $application = new Application();
         $application->add(new BuildCommand());

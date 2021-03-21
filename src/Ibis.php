@@ -10,7 +10,7 @@ class Ibis
     /**
      * @var array
      */
-    public static $config;
+    private static $config;
 
     /**
      * Provides the ebook title
@@ -77,9 +77,12 @@ class Ibis
     }
 
     /**
+     * Get the configuration array
+     *
+     * Opt for named static methods when you can.
      * @return array
      */
-    private static function config()
+    public static function config()
     {
         if (static::$config) {
             return static::$config;
@@ -92,5 +95,14 @@ class Ibis
         }
 
         return static::$config;
+    }
+
+    /**
+     * Resets the Ibis configuration
+     * Probably only used in tests
+     */
+    public static function reset()
+    {
+        static::$config = null;
     }
 }

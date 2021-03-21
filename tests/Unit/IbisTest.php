@@ -3,14 +3,16 @@
 namespace Tests\Unit;
 
 use Ibis\Ibis;
+use Illuminate\Support\Arr;
 use PHPUnit\Framework\TestCase;
 
 class IbisTest extends TestCase
 {
     protected function setUp(): void
     {
+        Ibis::reset();
+
         chdir(__DIR__.'/../Mocks/Ibis');
-        Ibis::$config = null; // more simple way of clearing out the static cache
     }
 
     public function testTitle(): void
@@ -63,5 +65,24 @@ class IbisTest extends TestCase
     public function testSampleNotice(): void
     {
         self::assertEquals('This is a sample notice.', Ibis::sampleNotice());
+    }
+
+    public function testConfig(): void
+    {
+        $config = Ibis::config();
+
+        self::assertEquals([
+            'title' => 'I am a title',
+            'author' => 'Authorson Nameski',
+            'content_path' => '/tmp',
+            'assets_path' => '/assets-here',
+            'sample' => [
+                [1, 2],
+                [3, 4],
+            ],
+            'sample_notice' => 'This is a sample notice.',
+        ], Arr::except($config, 'export_path'));
+
+        self::assertEquals(getcwd(), $config['export_path']);
     }
 }
