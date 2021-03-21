@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Commands;
 
+use Ibis\Ibis;
 use PHPUnit\Framework\TestCase;
 use Ibis\Commands\SortContentCommand;
 use Illuminate\Filesystem\Filesystem;
@@ -17,6 +18,8 @@ class SortContentCommandTest extends TestCase
 
     protected function setUp(): void
     {
+        Ibis::$config = null; // clear the cache
+
         $application = new Application();
         $application->add(new SortContentCommand());
         $command = $application->find('content:sort');
@@ -30,13 +33,13 @@ class SortContentCommandTest extends TestCase
      */
     protected function tearDown(): void
     {
-        $directory = __DIR__.'/../../Mocks/ContentToSort/content';
+        $directory = __DIR__.'/../../Mocks/ContentToSort/book-content';
         $filesystem = new Filesystem();
-        $filesystem->delete([[
+        $filesystem->delete([
             $directory.'/001-big-headline.md',
             $directory.'/002-another-headline.md',
             $directory.'/003-i-am-a-headline.md'
-        ]]);
+        ]);
     }
 
     public function testNoFilesNothingIsDone(): void
@@ -56,17 +59,17 @@ class SortContentCommandTest extends TestCase
         chdir($directory);
 
         $file1Content = "# I am a headline\n\nContent here!";
-        file_put_contents($directory.'/content/zz.zz', $file1Content);
+        file_put_contents($directory.'/book-content/zz.zz', $file1Content);
         $file2Content = "## Another headline\n\nAnd More content!";
-        file_put_contents($directory.'/content/middle-file.txt', $file2Content);
+        file_put_contents($directory.'/book-content/middle-file.txt', $file2Content);
         $file3Content = "### Big headline\n\nlittle content";
-        file_put_contents($directory.'/content/d.md', $file3Content);
+        file_put_contents($directory.'/book-content/d.md', $file3Content);
 
         $this->commandTester->execute([]);
 
         self::assertEquals(0, $this->commandTester->getStatusCode());
-        self::assertStringEqualsFile($directory.'/content/001-big-headline.md', $file3Content);
-        self::assertStringEqualsFile($directory.'/content/002-another-headline.md', $file2Content);
-        self::assertStringEqualsFile($directory.'/content/003-i-am-a-headline.md', $file1Content);
+        self::assertStringEqualsFile($directory.'/book-content/001-big-headline.md', $file3Content);
+        self::assertStringEqualsFile($directory.'/book-content/002-another-headline.md', $file2Content);
+        self::assertStringEqualsFile($directory.'/book-content/003-i-am-a-headline.md', $file1Content);
     }
 }
