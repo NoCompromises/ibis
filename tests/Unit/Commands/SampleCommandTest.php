@@ -62,6 +62,13 @@ class SampleCommandTest extends TestCase
         $this->examinePDFContent($generatedFilePath);
     }
 
+    /**
+     * This reviews the PDF content in page count and text.
+     *
+     * It's not perfect because it doesn't have the ability to check formatting, but it's good enough.
+     * @param $generatedFilePath
+     * @throws \Exception
+     */
     protected function examinePDFContent($generatedFilePath): void
     {
         $parser = new Parser();
