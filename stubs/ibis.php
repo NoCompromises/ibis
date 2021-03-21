@@ -39,6 +39,11 @@ return [
     ],
 
     /**
+     * Location of asset files for book content
+     */
+    'assets_path' => __DIR__.'/assets',
+
+    /**
      * Location of markdown files for book content
      */
     'content_path' => __DIR__.'/content',

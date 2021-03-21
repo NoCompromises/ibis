@@ -28,9 +28,26 @@ class IbisTest extends TestCase
         self::assertEquals('Authorson Nameski', Ibis::author());
     }
 
+    public function testAssetsPath(): void
+    {
+        self::assertEquals('/assets-here', Ibis::assetsPath());
+    }
+
+    public function testAssetsPathNoConfigFile(): void
+    {
+        chdir(__DIR__);
+        self::assertEquals(__DIR__.'/assets', Ibis::assetsPath());
+    }
+
     public function testContentPath(): void
     {
         self::assertEquals('/tmp', Ibis::contentPath());
+    }
+
+    public function testContentPathNoConfigFile(): void
+    {
+        chdir(__DIR__);
+        self::assertEquals(__DIR__.'/content', Ibis::contentPath());
     }
 
     public function testExportPath(): void

@@ -2,6 +2,7 @@
 
 namespace Ibis\Commands;
 
+use Ibis\Ibis;
 use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -47,7 +48,9 @@ class InitCommand extends Command
 
         $currentPath = getcwd();
 
-        if ($this->disk->isDirectory($currentPath.'/assets')) {
+        $assetsPath = Ibis::assetsPath();
+
+        if ($this->disk->isDirectory($assetsPath)) {
             $this->output->writeln('');
             $this->output->writeln('<info>Project already initialised!</info>');
 
@@ -55,20 +58,22 @@ class InitCommand extends Command
         }
 
         $this->disk->makeDirectory(
-            $currentPath.'/assets'
+            $assetsPath
         );
 
         $this->disk->makeDirectory(
-            $currentPath.'/assets/fonts'
+            $assetsPath.'/fonts'
         );
 
+        $contentPath = Ibis::contentPath();
+
         $this->disk->makeDirectory(
-            $currentPath.'/content'
+            $contentPath
         );
 
         $this->disk->copyDirectory(
             __DIR__.'/../../stubs/content',
-            $currentPath.'/content'
+            $contentPath
         );
 
         $this->disk->put(
@@ -77,17 +82,17 @@ class InitCommand extends Command
         );
 
         $this->disk->put(
-            $currentPath.'/assets/cover.jpg',
+            $assetsPath.'/cover.jpg',
             $this->disk->get(__DIR__.'/../../stubs/assets/cover.jpg')
         );
 
         $this->disk->put(
-            $currentPath.'/assets/theme-dark.html',
+            $assetsPath.'/theme-dark.html',
             $this->disk->get(__DIR__.'/../../stubs/assets/theme-dark.html')
         );
 
         $this->disk->put(
-            $currentPath.'/assets/theme-light.html',
+            $assetsPath.'/theme-light.html',
             $this->disk->get(__DIR__.'/../../stubs/assets/theme-light.html')
         );
 

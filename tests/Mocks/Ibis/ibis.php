@@ -5,6 +5,7 @@ return [
     'author' => 'Authorson Nameski',
     'content_path' => '/tmp',
     'export_path' => __DIR__,
+    'assets_path' => '/assets-here',
     'sample' => [
         [1, 2],
         [3, 4],

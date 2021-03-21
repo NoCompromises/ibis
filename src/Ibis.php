@@ -2,6 +2,7 @@
 
 namespace Ibis;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 class Ibis
@@ -28,11 +29,19 @@ class Ibis
     }
 
     /**
+     * Provides the path for ebook assets
+     */
+    public static function assetsPath()
+    {
+        return Arr::get(self::config(), 'assets_path', getcwd().'/assets');
+    }
+
+    /**
      * Provides the path for ebook content
      */
     public static function contentPath()
     {
-        return self::config()['content_path'];
+        return Arr::get(self::config(), 'content_path', getcwd().'/content');
     }
 
     /**
@@ -76,7 +85,11 @@ class Ibis
             return static::$config;
         }
 
-        static::$config = require getcwd().'/ibis.php';
+        $configFile = getcwd().'/ibis.php';
+
+        if (file_exists($configFile)) {
+            static::$config = require $configFile;
+        }
 
         return static::$config;
     }

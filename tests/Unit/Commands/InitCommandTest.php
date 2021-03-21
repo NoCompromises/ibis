@@ -3,6 +3,7 @@
 namespace Tests\Unit\Commands;
 
 use Ibis\Commands\InitCommand;
+use Ibis\Ibis;
 use PHPUnit\Framework\TestCase;
 use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Console\Application;
@@ -24,6 +25,7 @@ class InitCommandTest extends TestCase
 
     protected function setUp(): void
     {
+        Ibis::$config = null; // clear config cache
         $application = new Application();
         $application->add(new InitCommand());
         $command = $application->find('init');
