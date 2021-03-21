@@ -11,4 +11,5 @@ return [
         [3, 4],
     ],
     'sample_notice' => 'This is a sample notice.',
+    'html_decorators' => ['not-valid'],
 ];

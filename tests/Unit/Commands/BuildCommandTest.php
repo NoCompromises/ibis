@@ -325,6 +325,19 @@ class BuildCommandTest extends TestCase
         self::assertStringEqualsFile($directory.'/h1-break-prepared.html', $result);
     }
 
+    public function testDeepInspectionPrepareForPdfNoBreaksIfNoDecorator(): void
+    {
+        $directory = __DIR__.'/../../Mocks/NoDecorators';
+        chdir($directory);
+
+        $directory = __DIR__.'/../../Data/PrepareForPdf';
+        $source = file_get_contents($directory.'/h1-break-source.html');
+
+        $result = $this->getPrepareForPdf($source, 2);
+
+        self::assertStringEqualsFile($directory.'/h1-break-source.html', $result);
+    }
+
     /**
      * Normally you don't want to do something like this. However, since these are hard-coded
      * in the command and not something like decorators, this is just a faster/easier

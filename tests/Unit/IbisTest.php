@@ -4,7 +4,10 @@ namespace Tests\Unit;
 
 use Ibis\Ibis;
 use Illuminate\Support\Arr;
+use Ibis\Decorators\PageBreak;
 use PHPUnit\Framework\TestCase;
+use Ibis\Decorators\BlockQuoteClass;
+use Ibis\Decorators\BlockQuoteClassWithPrefix;
 
 class IbisTest extends TestCase
 {
@@ -67,6 +70,24 @@ class IbisTest extends TestCase
         self::assertEquals('This is a sample notice.', Ibis::sampleNotice());
     }
 
+    public function testHtmlDecorators(): void
+    {
+        self::assertEquals(['not-valid'], Ibis::htmlDecorators());
+    }
+
+    public function testHtmlDecoratorsDefaultForBackwardsCompatibility(): void
+    {
+        chdir(__DIR__);
+        $decorators = Ibis::htmlDecorators();
+        self::assertIsArray($decorators);
+        self::assertCount(4, $decorators);
+        self::assertInstanceOf(BlockQuoteClass::class, $decorators[0]);
+        // would be nice to test on 'notice' and 'warning'
+        self::assertInstanceOf(BlockQuoteClassWithPrefix::class, $decorators[1]);
+        self::assertInstanceOf(BlockQuoteClassWithPrefix::class, $decorators[2]);
+        self::assertInstanceOf(PageBreak::class, $decorators[3]);
+    }
+
     public function testConfig(): void
     {
         $config = Ibis::config();
@@ -81,6 +102,7 @@ class IbisTest extends TestCase
                 [3, 4],
             ],
             'sample_notice' => 'This is a sample notice.',
+            'html_decorators' => ['not-valid'],
         ], Arr::except($config, 'export_path'));
 
         self::assertEquals(getcwd(), $config['export_path']);
