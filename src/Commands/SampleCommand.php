@@ -63,7 +63,7 @@ class SampleCommand extends Command
         $mpdf->WriteHTML('<p style="text-align: center; font-size: 16px; line-height: 40px;">'.Ibis::sampleNotice().'</p>');
 
         $mpdf->Output(
-            $exportPath.'/sample-.'.$fileName.'.pdf'
+            $exportPath.'/sample-'.$fileName.'.pdf'
         );
 
         return 0;
