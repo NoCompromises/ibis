@@ -33,19 +33,19 @@ ibis init
 
 This will create the following files and directories:
 
-- /assets
-- /assets/fonts
-- /assets/cover.jpg
-- /assets/theme-light.html
-- /assets/theme-dark.html
-- /content
-- /ibis.php
+- `/assets`
+- `/assets/fonts`
+- `/assets/cover.jpg`
+- `/assets/theme-light.html`
+- `/assets/theme-dark.html`
+- `/content`
+- `/ibis.php`
 
 You may configure your book by editing the `/ibis.php` configuration file.
 
 ## Writing Your eBook
 
-The `init` command will create sample .md files inside the content folder. You can explore those files to see how you can write your book. This sample content is taken from [Laravel Queues in Action](https://learn-laravel-queues.com). 
+The `init` command will create sample `.md` files inside the `content` folder. You can explore those files to see how you can write your book. This sample content is taken from [Laravel Queues in Action](https://learn-laravel-queues.com). 
 
 Inside the content directory, you can write multiple `.md` files. Ibis uses the headings to divide the book into parts and chapters:
 
@@ -75,15 +75,23 @@ Images can be stored in the content folder and then brought in like this:
 
 Edit your `/ibis.php` configuration files to define the font files to be loaded from the `/assets/fonts` directory. After that you may use the defined fonts in your themes (`/assets/theme-light.html` & `/assets/theme-dark.html`).
 
+## Using a Cover
+
+To use an image for your book cover, ensure the `assets/cover.jpg` file contains your design.
+
+If you'd like to create an HTML-based design of your book cover, you can remove the image file and create a `assets/cover.html` file. Please note that this HTML has to be compatible with the [MPDF](https://mpdf.github.io/) library's constraints.
+
+If you do not have a `assets/cover.jpg` or a `assets/cover.html`, your PDF will not contain a cover page.
+
 ## Generating PDF eBook
 
 ```
 ibis build
 ```
 
-Ibis will parse the files in alphabetical order and store the PDF file in `/export`.
+Ibis will parse the `.md` files in the `content` folder in alphabetical order and store the PDF file in `/export`.
 
-The default is to generate the PDF using the light theme, to generate a PDF using the dark theme:
+The default is to generate the PDF using the light theme. To generate a PDF using the dark theme:
 
 ```
 ibis build dark
@@ -98,6 +106,14 @@ ibis sample dark
 ```
 
 This command will use the generated files from the `ibis build` command to generate samples from your PDF eBook. You can configure which pages to include in the sample by updating the `/ibis.php` file.
+
+## Sort Content
+
+```
+ibis content:sort
+```
+
+This command will take your content files and read them in sorted alphabetically from the filesystem.  It will then rename the files with a 3 digit number indicating the order and the filename a slug of the first heading.
 
 ## Development
 
