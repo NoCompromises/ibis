@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Commands;
 
-use Ibis\Commands\InitCommand;
 use Ibis\Ibis;
+use Ibis\Commands\InitCommand;
 use PHPUnit\Framework\TestCase;
 use Illuminate\Filesystem\Filesystem;
 use Symfony\Component\Console\Application;
