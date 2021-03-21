@@ -30,6 +30,7 @@
         "friendsofphp/php-cs-fixer": "^2.18",
         "phpunit/phpunit": "^9",
         "roave/security-advisories": "dev-latest",
+        "smalot/pdfparser": "^v0.16",
         "symfony/var-dumper": "^5.0"
     },
     "autoload": {
